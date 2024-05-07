@@ -44,7 +44,7 @@ ROBOTSTXT_OBEY = True
 
 
 PLAYWRIGHT_LAUNCH_OPTIONS = {
-    "headless": False,
+    "headless": True,
 }
 
 DOWNLOAD_HANDLERS = {

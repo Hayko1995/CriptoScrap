@@ -103,5 +103,49 @@ class ScrapingMagnifiSpider(scrapy.Spider):
                 './/div/text()').get()
             item['utilisation'] = coin_table[6].xpath(
                 './/div/text()').get()
-            
+
+            yield item
+
+
+class ScrapingMagnifiSpider(scrapy.Spider):
+    name = "drift"
+    allowed_domains = ["app.marginfi.com"]
+
+    def start_requests(self):
+        url = "https://app.drift.trade/earn/lend-borrow/deposits/"
+        yield scrapy.Request(url, meta=dict(
+            playwright=True,
+            playwright_include_page=True,
+            playwright_page_methods=[
+                PageMethod("wait_for_timeout", 8000)
+            ]
+        ))
+
+    def parse(self, response):
+        # iterate over the product elements
+        # print(response)
+
+        coin_div = response.xpath(
+            '//div[contains(@class, "bg-container-bg hover:bg-container-bg-hover py-2 css-yv7tq1 ej8o9vq1")]')
+        item = {}
+
+        for coin in coin_div:
+            # with open("a.html", 'w') as html_file:
+            #     html_file.write(
+            #         str(coin.extract()))
+            coin_table = coin.xpath('.//div[contains(@class, "w-full")]')
+            item['name'] = coin_table[0].xpath(
+                './/span[contains(@class, "font-[300] text-[13px] leading-[16px] mt-0.5 text-text-emphasis")]/text()').get()
+            coins_global_deposit = coin_table[1].xpath(
+                './/span[contains(@class, "whitespace-nowrap")]')
+            global_deposit_arr = []
+            for i in coins_global_deposit:
+                global_deposit_arr.append(i.xpath('./text()').get())
+                ' '.join(global_deposit_arr)
+            item['globalDepositMax'] = ' '.join(global_deposit_arr)
+
+            item['depositAPR'] = coin_table[2].xpath(
+                './/span[contains(@class, "whitespace-nowrap")]/text()').get()
+            item['initalAssert'] = coin_table[3].xpath(
+                './/span[contains(@class, "whitespace-nowrap")]/text()').get()
             yield item
