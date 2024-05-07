@@ -1,0 +1,9 @@
+# install project requarements
+pip install -r requarements.txt
+
+# need to test again 
+playwright install chromium
+playwright install-deps chromium
+
+scrapy crawl marginfi -o a.json
+scrapy crawl kamino -o a.json
