@@ -90,7 +90,7 @@ class ScrapingMagnifiSpider(scrapy.Spider):
             yield item
 
 
-class ScrapingMagnifiSpider(scrapy.Spider):
+class ScrapingDriftSpider(scrapy.Spider):
     name = "drift"
     allowed_domains = ["app.marginfi.com"]
 

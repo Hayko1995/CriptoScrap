@@ -1,9 +1,18 @@
+git clone https://github.com/Hayko1995/CriptoScrap.git
+
+cd CriptoScrap
+
+docker build -t test .
+
+docker run --rm -it test:latest
+
+scrapy crawl marginfi -o a.json
+scrapy crawl kamino -o a.json
+
+
 # install project requarements
 pip install -r requarements.txt
 
 # need to test again 
 playwright install chromium
 playwright install-deps chromium
-
-scrapy crawl marginfi -o a.json
-scrapy crawl kamino -o a.json
