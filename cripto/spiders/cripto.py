@@ -3,11 +3,7 @@ import re
 import json
 import hashlib
 from pathlib import Path
-
-
 import scrapy
-
-
 from scrapy_playwright.page import PageMethod
 
 
@@ -26,11 +22,6 @@ class ScrapingKaminoSpider(scrapy.Spider):
         ))
 
     def parse(self, response):
-        # iterate over the product elements
-        # print(response)
-        # with open("a.html", 'w') as html_file:
-        #     html_file.write(str(response.xpath('//tr[contains(@class, "__clickable_iresq_108")]').extract()))
-
         coin_siv = response.xpath(
             '//tr[contains(@class, "__clickable_iresq_108")]')
         item = {}
@@ -69,18 +60,10 @@ class ScrapingMagnifiSpider(scrapy.Spider):
         ))
 
     def parse(self, response):
-        # iterate over the product elements
-        # print(response)
-
         coin_div = response.xpath(
             '//tr[contains(@class, "transition-colors")]')
         item = {}
         coin_div = coin_div[1:]
-
-        # with open("a.html", 'w') as html_file:
-        #     html_file.write(
-        #         str(coin_div.extract()))
-
         for coin in coin_div:
 
             # print(coin.extract())
@@ -122,17 +105,12 @@ class ScrapingMagnifiSpider(scrapy.Spider):
         ))
 
     def parse(self, response):
-        # iterate over the product elements
-        # print(response)
 
         coin_div = response.xpath(
             '//div[contains(@class, "bg-container-bg hover:bg-container-bg-hover py-2 css-yv7tq1 ej8o9vq1")]')
         item = {}
 
         for coin in coin_div:
-            # with open("a.html", 'w') as html_file:
-            #     html_file.write(
-            #         str(coin.extract()))
             coin_table = coin.xpath('.//div[contains(@class, "w-full")]')
             item['name'] = coin_table[0].xpath(
                 './/span[contains(@class, "font-[300] text-[13px] leading-[16px] mt-0.5 text-text-emphasis")]/text()').get()
