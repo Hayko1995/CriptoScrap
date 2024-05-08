@@ -6,6 +6,8 @@ from pathlib import Path
 import scrapy
 from scrapy_playwright.page import PageMethod
 
+supportedCoins = ['USDC', 'SOL']
+
 
 class ScrapingKaminoSpider(scrapy.Spider):
     name = "kamino"
@@ -39,9 +41,6 @@ class ScrapingKaminoSpider(scrapy.Spider):
                 './/div[contains(@class, "_cell_1nycx_1")]/p/text()').get()
             item['borrow_aPY'] = coins[6].xpath(
                 './/div[contains(@class, "_cell_1nycx_1")]/p/text()').get()
-
-            print("results", item['name'], item['total_supply'], item['total_borrow'],
-                  item['maxLtv'],  item['supply_aPY'], item['borrow_aPY'])
             yield item
 
 
@@ -93,37 +92,48 @@ class ScrapingMagnifiSpider(scrapy.Spider):
 class ScrapingDriftSpider(scrapy.Spider):
     name = "drift"
     allowed_domains = ["app.marginfi.com"]
+    urls = ['https://app.drift.trade/earn/lend-borrow/deposits', 'https://app.drift.trade/earn/lend-borrow/borrow']
 
     def start_requests(self):
-        url = "https://app.drift.trade/earn/lend-borrow/deposits/"
-        yield scrapy.Request(url, meta=dict(
-            playwright=True,
-            playwright_include_page=True,
-            playwright_page_methods=[
-                PageMethod("wait_for_timeout", 8000)
-            ]
-        ))
+
+        for url in self.urls:
+            yield scrapy.Request(url, meta=dict(
+                playwright=True,
+                playwright_include_page=True,
+                playwright_page_methods=[
+                    PageMethod("wait_for_timeout", 8000)
+                ]
+            ))
 
     def parse(self, response):
+        if response.url == self.urls[0]:
+            coin_div = response.xpath(
+                '//div[contains(@class, "bg-container-bg hover:bg-container-bg-hover py-2 css-yv7tq1 ej8o9vq1")]')
 
-        coin_div = response.xpath(
-            '//div[contains(@class, "bg-container-bg hover:bg-container-bg-hover py-2 css-yv7tq1 ej8o9vq1")]')
-        item = {}
+            for coin in coin_div:
+                item = {}
+                item['item'] = 'drift'
+                coin_table = coin.xpath('.//div[contains(@class, "w-full")]')
+                name = coin_table[0].xpath(
+                    './/span[contains(@class, "font-[300] text-[13px] leading-[16px] mt-0.5 text-text-emphasis")]/text()').get().strip()
+                if (name in supportedCoins):
+                    item['name'] = name
+                    item['depositAPY'] = coin_table[2].xpath(
+                        './/span[contains(@class, "whitespace-nowrap")]/text()').get()
 
-        for coin in coin_div:
-            coin_table = coin.xpath('.//div[contains(@class, "w-full")]')
-            item['name'] = coin_table[0].xpath(
-                './/span[contains(@class, "font-[300] text-[13px] leading-[16px] mt-0.5 text-text-emphasis")]/text()').get()
-            coins_global_deposit = coin_table[1].xpath(
-                './/span[contains(@class, "whitespace-nowrap")]')
-            global_deposit_arr = []
-            for i in coins_global_deposit:
-                global_deposit_arr.append(i.xpath('./text()').get())
-                ' '.join(global_deposit_arr)
-            item['globalDepositMax'] = ' '.join(global_deposit_arr)
+                    yield item
+        if response.url == self.urls[1]:
+            coin_div = response.xpath(
+                '//div[contains(@class, "bg-container-bg hover:bg-container-bg-hover py-2 css-1ojaps7 ej8o9vq1")]')
+            for coin in coin_div:
+                item = {}
+                item['item'] = 'drift'
+                coin_table = coin.xpath('.//div[contains(@class, "w-full")]')
+                name = coin_table[0].xpath(
+                    './/span[contains(@class, "font-[300] text-[13px] leading-[16px] mt-0.5 text-text-emphasis")]/text()').get().strip()
+                if (name in supportedCoins):
+                    item['name'] = name
+                    item['borrowAPY'] = coin_table[3].xpath(
+                        './/span[contains(@class, "whitespace-nowrap")]/text()').get()
 
-            item['depositAPR'] = coin_table[2].xpath(
-                './/span[contains(@class, "whitespace-nowrap")]/text()').get()
-            item['initalAssert'] = coin_table[3].xpath(
-                './/span[contains(@class, "whitespace-nowrap")]/text()').get()
-            yield item
+                yield item
