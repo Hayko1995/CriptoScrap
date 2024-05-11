@@ -92,8 +92,9 @@ class ScrapingMagnifiSpider(scrapy.Spider):
 class ScrapingDriftSpider(scrapy.Spider):
     name = "drift"
     allowed_domains = ["app.marginfi.com"]
-    urls = ['https://app.drift.trade/earn/lend-borrow/deposits', 'https://app.drift.trade/earn/lend-borrow/borrow']
-
+    urls = ['https://app.drift.trade/earn/lend-borrow/deposits',
+            'https://app.drift.trade/earn/lend-borrow/borrow']
+    
     def start_requests(self):
 
         for url in self.urls:
@@ -122,6 +123,7 @@ class ScrapingDriftSpider(scrapy.Spider):
                         './/span[contains(@class, "whitespace-nowrap")]/text()').get()
 
                     yield item
+
         if response.url == self.urls[1]:
             coin_div = response.xpath(
                 '//div[contains(@class, "bg-container-bg hover:bg-container-bg-hover py-2 css-1ojaps7 ej8o9vq1")]')
@@ -136,4 +138,4 @@ class ScrapingDriftSpider(scrapy.Spider):
                     item['borrowAPY'] = coin_table[3].xpath(
                         './/span[contains(@class, "whitespace-nowrap")]/text()').get()
 
-                yield item
+                    yield item
