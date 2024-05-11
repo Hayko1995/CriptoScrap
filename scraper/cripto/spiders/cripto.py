@@ -29,19 +29,17 @@ class ScrapingKaminoSpider(scrapy.Spider):
         item = {}
         for coin in coin_siv:
             coins = coin.xpath('.//td')
-            item['name'] = coins[0].xpath(
+            name = coins[0].xpath(
                 './/div[contains(@class, "_reserveName_1nycx_12")]/p/text()').get()
-            item['total_supply'] = coins[1].xpath(
-                './/div[contains(@class, "_iconContainer_19edf_434")]/p/text()').get()
-            item['total_borrow'] = coins[2].xpath(
-                './/div[contains(@class, "_iconContainer_19edf_434")]/p/text()').get()
-            item['maxLtv'] = coins[3].xpath(
-                './/div[contains(@class, "_cell_1nycx_1")]/p/text()').get()
-            item['supply_aPY'] = coins[4].xpath(
-                './/div[contains(@class, "_cell_1nycx_1")]/p/text()').get()
-            item['borrow_aPY'] = coins[6].xpath(
-                './/div[contains(@class, "_cell_1nycx_1")]/p/text()').get()
-            yield item
+            
+            if (name in supportedCoins):
+                item['name'] = name
+                item['item'] = "kamino"
+                item['depositAPY'] = coins[4].xpath(
+                    './/div[contains(@class, "_cell_1nycx_1")]/p/text()').get()
+                item['borrowAPY'] = coins[6].xpath(
+                    './/div[contains(@class, "_cell_1nycx_1")]/p/text()').get()
+                yield item
 
 
 class ScrapingMagnifiSpider(scrapy.Spider):
@@ -94,7 +92,7 @@ class ScrapingDriftSpider(scrapy.Spider):
     allowed_domains = ["app.marginfi.com"]
     urls = ['https://app.drift.trade/earn/lend-borrow/deposits',
             'https://app.drift.trade/earn/lend-borrow/borrow']
-    
+
     def start_requests(self):
 
         for url in self.urls:

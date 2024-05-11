@@ -5,7 +5,8 @@
 import time
 import subprocess
 
-cmd = ["scrapy", "crawl", "drift"]
+drift = ["scrapy", "crawl", "drift"]
+kamino = ["scrapy", "crawl", "kamino"]
 
 # schedule.every(1).minute.do(subprocess.Popen(cmd).wait())
 # while True:
@@ -14,5 +15,6 @@ cmd = ["scrapy", "crawl", "drift"]
 
 starttime = time.monotonic()
 while True:
-    subprocess.run(cmd)
+    subprocess.run(drift)
+    subprocess.run(kamino)
     time.sleep(60.0 - ((time.monotonic() - starttime) % 60.0))
