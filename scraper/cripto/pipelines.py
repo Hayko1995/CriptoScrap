@@ -47,10 +47,12 @@ class SqlitePipeline:
             "select * from app_coins where name = ? and item = ?", (item['name'], item['item']))
         result = self.cur.fetchone()
         if result:
+            print("🐍 File: cripto/pipelines.py | Line: 50 | process_item ~ result",result)
             if (item['depositAPY'] == ''):
-                item['depositAPY'] = result[2]
+                item['depositAPY'] = result[3]
             if (item['borrowAPY'] == ''):
-                item['borrowAPY'] = result[3]
+                item['borrowAPY'] = result[4]
+                print("🐍 File: cripto/pipelines.py | Line: 55 | process_item ~ result[3]",result[3])
 
             self.cur.execute('''update app_coins set depositAPY=? , borrowAPY=? where name == ? and item = ?''',
                              (

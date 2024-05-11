@@ -52,7 +52,7 @@ class ScrapingMagnifiSpider(scrapy.Spider):
             playwright=True,
             playwright_include_page=True,
             playwright_page_methods=[
-                PageMethod("wait_for_timeout", 8000)
+                PageMethod("wait_for_timeout", 10000)
             ]
         ))
 
@@ -100,7 +100,7 @@ class ScrapingDriftSpider(scrapy.Spider):
                 playwright=True,
                 playwright_include_page=True,
                 playwright_page_methods=[
-                    PageMethod("wait_for_timeout", 8000)
+                    PageMethod("wait_for_timeout", 10000)
                 ]
             ))
 
@@ -135,5 +135,6 @@ class ScrapingDriftSpider(scrapy.Spider):
                     item['name'] = name
                     item['borrowAPY'] = coin_table[3].xpath(
                         './/span[contains(@class, "whitespace-nowrap")]/text()').get()
-
+                    print("🐍 File: spiders/cripto.py | Line: 140 | parse ~ item",item)
                     yield item
+                    

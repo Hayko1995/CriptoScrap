@@ -41,8 +41,11 @@ INSTALLED_APPS = [
     'app',
     'rest_framework_swagger',       # Swagger
     'rest_framework',               # Django rest framework
-    'drf_yasg'
+    'drf_yasg',
+    'corsheaders'
 ]
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -52,6 +55,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'criptoBack.urls'
