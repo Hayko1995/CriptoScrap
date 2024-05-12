@@ -184,7 +184,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   for (var item in results)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                      child: Expanded(
+                      child: SizedBox(
+                        width: 400,
                         child: Row(
                           children: [
                             Padding(
