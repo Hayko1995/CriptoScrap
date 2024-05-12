@@ -45,7 +45,8 @@ RUN flutter config --enable-web
 RUN mkdir /app/
 COPY . /app/
 WORKDIR /app/
-RUN flutter build web 
+RUN flutter build web --web-renderer html --release
+
 # RUN flutter run -d web-server --web-hostname 0.0.0.0 --web-port 8080
 
 

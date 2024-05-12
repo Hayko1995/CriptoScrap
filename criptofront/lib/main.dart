@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:async';
+import 'dart:js' as js;
 
 Timer? timer;
 
@@ -60,11 +61,24 @@ class _MyHomePageState extends State<MyHomePage> {
     if (selectedType == 'LEND') {
       filter = "deposit";
     }
+    _results = [];
     for (var item in coins) {
       if (item['name'] == selectedCoin) {
         var _item = {};
         _item['site'] = item['item'];
         _item['price'] = item[filter];
+        if (item['name'] == 'marginfi') {
+          _item['url'] = 'https://app.marginfi.com';
+        }
+        print(item);
+        if (item['name'] == 'SOL' && item['item'] == 'drift') {
+          _item['url'] = 'https://app.drift.trade/earn/lend-borrow/deposits';
+        }
+        if (item['name'] == 'SOL' && item['item'] == 'kamino') {
+          _item['url'] =
+              'https://app.kamino.finance/lending/reserve/7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF/d4A2prbA2whesmvHaL88BH6Ewn5N4bTSU2Ze8P6Bc4Q';
+        }
+        print(_item);
         _results.add(_item);
       }
     }
@@ -170,10 +184,31 @@ class _MyHomePageState extends State<MyHomePage> {
                   for (var item in results)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                      child: SizedBox(
-                        width: 200,
-                        child: ElevatedButton(
-                            onPressed: () {}, child: Text(item.toString())),
+                      child: Expanded(
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                item['site'],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(item['price']),
+                            ),
+                            if (item.containsKey("url"))
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      js.context
+                                          .callMethod('open', [item['url']]);
+                                    },
+                                    child: Text("open Page")),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                 ],
