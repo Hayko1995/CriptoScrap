@@ -63,15 +63,15 @@ class _MyHomePageState extends State<MyHomePage> {
     for (var item in coins) {
       if (item['name'] == selectedCoin) {
         var _item = {};
-        print("////////////////////////////////////////");
-        print(item);
+        print("''''''''''''''item''''''''''''''");
         _item['site'] = item['item'];
         _item['price'] = item[filter];
-        results.add(_item);
+        _item['price111111111'] = "item[filter]";
+        _results.add(_item);
       }
     }
     setState(() {
-      results = results;
+      results = _results;
     });
   }
 
@@ -116,6 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                Text("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
                 Column(
                   children: [
                     for (var item in coinNames)
@@ -175,12 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: SizedBox(
                         width: 200,
                         child: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                openConfigs = true;
-                              });
-                            },
-                            child: Text(item.toString())),
+                            onPressed: () {}, child: Text(item.toString())),
                       ),
                     ),
                 ],
