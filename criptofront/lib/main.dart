@@ -63,10 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
     for (var item in coins) {
       if (item['name'] == selectedCoin) {
         var _item = {};
-        print("''''''''''''''item''''''''''''''");
         _item['site'] = item['item'];
         _item['price'] = item[filter];
-        _item['price111111111'] = "item[filter]";
         _results.add(_item);
       }
     }
