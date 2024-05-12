@@ -14,7 +14,6 @@ class getCoins(APIView):
         try:
             serializer = CoinsSerializer(
                 Coins.objects.all(), many=True)
-            print(serializer.data)
             response = Response(serializer.data, status=status.HTTP_200_OK)
             return response
 

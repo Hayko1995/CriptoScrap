@@ -35,9 +35,9 @@ class ScrapingKaminoSpider(scrapy.Spider):
             if (name in supportedCoins):
                 item['name'] = name
                 item['item'] = "kamino"
-                item['depositAPY'] = coins[4].xpath(
+                item['deposit'] = coins[4].xpath(
                     './/div[contains(@class, "_cell_1nycx_1")]/p/text()').get()
-                item['borrowAPY'] = coins[6].xpath(
+                item['borrow'] = coins[6].xpath(
                     './/div[contains(@class, "_cell_1nycx_1")]/p/text()').get()
                 yield item
 
@@ -62,8 +62,6 @@ class ScrapingMagnifiSpider(scrapy.Spider):
         item = {}
         coin_div = coin_div[1:]
         for coin in coin_div:
-
-            # print(coin.extract())
             coin_table = coin.xpath('.//td[contains(@class, "align-middle")]')
 
             with open("a.html", 'w') as html_file:
@@ -117,7 +115,7 @@ class ScrapingDriftSpider(scrapy.Spider):
                     './/span[contains(@class, "font-[300] text-[13px] leading-[16px] mt-0.5 text-text-emphasis")]/text()').get().strip()
                 if (name in supportedCoins):
                     item['name'] = name
-                    item['depositAPY'] = coin_table[2].xpath(
+                    item['deposit'] = coin_table[2].xpath(
                         './/span[contains(@class, "whitespace-nowrap")]/text()').get()
 
                     yield item
@@ -135,6 +133,5 @@ class ScrapingDriftSpider(scrapy.Spider):
                     item['name'] = name
                     item['borrowAPY'] = coin_table[3].xpath(
                         './/span[contains(@class, "whitespace-nowrap")]/text()').get()
-                    print("🐍 File: spiders/cripto.py | Line: 140 | parse ~ item",item)
                     yield item
                     

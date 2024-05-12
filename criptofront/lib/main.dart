@@ -55,14 +55,16 @@ class _MyHomePageState extends State<MyHomePage> {
     String filter = '';
     results = [];
     if (selectedType == 'BORROW') {
-      filter = "borrowAPY";
+      filter = "borrow";
     }
     if (selectedType == 'LEND') {
-      filter = "depositAPY";
+      filter = "deposit";
     }
     for (var item in coins) {
       if (item['name'] == selectedCoin) {
         var _item = {};
+        print("////////////////////////////////////////");
+        print(item);
         _item['site'] = item['item'];
         _item['price'] = item[filter];
         results.add(_item);
@@ -76,7 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> checkForNewSharedLists() async {
     MyAPI myAPi = MyAPI();
     List response = await myAPi.request();
-    print(response);
     for (var item in coins) {
       if (!_coinNames.contains(item['name'])) {
         _coinNames.add(item['name']);
@@ -87,7 +88,6 @@ class _MyHomePageState extends State<MyHomePage> {
       coins = response;
       coinNames = _coinNames;
     });
-    print(coinNames);
   }
 
   @override
@@ -101,7 +101,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     if (coins.isEmpty) {
-      print("object");
       checkForNewSharedLists();
     }
     return Scaffold(

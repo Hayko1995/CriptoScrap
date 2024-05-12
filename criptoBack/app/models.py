@@ -12,5 +12,8 @@ class Product(models.Model):
 class Coins(models.Model):
     name = models.TextField(null=True, blank=True)
     item = models.TextField(max_length=40, null=True, blank=True)
-    depositAPY = models.TextField(blank=True, null=True)
-    borrowAPY = models.TextField(blank=True, null=True)
+    deposit = models.TextField(blank=True, null=True)
+    borrow = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = "coins"

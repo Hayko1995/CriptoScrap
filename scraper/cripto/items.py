@@ -11,5 +11,5 @@ class CriptoItem(scrapy.Item):
     # define the fields for your item here like:
     name = Field()
     item = Field()
-    depositAPY = Field()
-    borrowAPY = Field()
+    deposit = Field()
+    borrow = Field()

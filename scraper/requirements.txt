@@ -1,3 +1,5 @@
 scrapy 
 scrapy-playwright
 playwright
+psycopg2-binary
+

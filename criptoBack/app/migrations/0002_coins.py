@@ -16,8 +16,8 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.TextField(blank=True, null=True)),
                 ('item', models.TextField(blank=True, max_length=40, null=True)),
-                ('depositAPY', models.TextField(blank=True, null=True)),
-                ('borrowAPY', models.TextField(blank=True, null=True)),
+                ('deposit', models.TextField(blank=True, null=True)),
+                ('borrow', models.TextField(blank=True, null=True)),
             ],
         ),
     ]

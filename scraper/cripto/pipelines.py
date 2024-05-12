@@ -7,6 +7,8 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 import sqlite3
+import psycopg2
+import os
 
 
 class CriptoPipeline:
@@ -17,70 +19,69 @@ class CriptoPipeline:
 class SqlitePipeline:
 
     def __init__(self):
+        hostname = os.environ.get('POSTGRES_HOST')
+        username = os.environ.get('POSTGRES_USER')
+        password = os.environ.get('POSTGRES_PASSWORD')
+        database = os.environ.get('POSTGRES_DATABASE')
+        port = os.environ.get('POSTGRES_PORT')
+        self.connection = psycopg2.connect(
+            host=hostname, user=username, password=password, port=port, dbname=database)
 
         # Create/Connect to database
-        self.con = sqlite3.connect('../demo.db')
+        # self.con = sqlite3.connect('../demo.db')
 
         # Create cursor, used to execute commands
-        self.cur = self.con.cursor()
+        self.cur = self.connection.cursor()
 
         # Create quotes table if none exists
         self.cur.execute("""
-        CREATE TABLE IF NOT EXISTS app_coins(
-            name TEXT,
-            item TEXT,
-            depositAPY TEXT,
-            borrowAPY TEXT
+        CREATE TABLE IF NOT EXISTS coins(
+            name text,
+            item text,
+            deposit text,
+            borrow text
         )
         """)
 
     def process_item(self, item, spider):
-        if (not 'depositAPY' in item):
-            item['depositAPY'] = ''
-        if (not 'borrowAPY' in item):
-            item['borrowAPY'] = ''
-
-        print("🐍 File: cripto/pipelines.py | Line: 42 | process_item ~ item", item)
+        if (not 'deposit' in item):
+            item['deposit'] = ''
+        if (not 'borrow' in item):
+            item['borrow'] = ''
 
         # Check to see if text is already in database
         self.cur.execute(
-            "select * from app_coins where name = ? and item = ?", (item['name'], item['item']))
+            "select * from coins where name = %s and item = %s", (item['name'], item['item']))
         result = self.cur.fetchone()
         if result:
-            print("🐍 File: cripto/pipelines.py | Line: 50 | process_item ~ result",result)
-            if (item['depositAPY'] == ''):
-                item['depositAPY'] = result[3]
-            if (item['borrowAPY'] == ''):
-                item['borrowAPY'] = result[4]
-                print("🐍 File: cripto/pipelines.py | Line: 55 | process_item ~ result[3]",result[3])
+            if (item['deposit'] == ''):
+                item['deposit'] = result[3]
+            if (item['borrow'] == ''):
+                item['borrow'] = result[4]
 
-            self.cur.execute('''update app_coins set depositAPY=? , borrowAPY=? where name == ? and item = ?''',
+            self.cur.execute('update coins set deposit=%s , borrow=%s where name =%s and item =%s',
                              (
-
-                                 item['depositAPY'],
-                                 item['borrowAPY'],
+                                 item['deposit'],
+                                 item['borrow'],
                                  item['name'],
                                  item['item']
                              ))
 
             # Execute insert of data into database
-            self.con.commit()
+            self.connection.commit()
 
         # If text isn't in the DB, insert data
         else:
-
             # Define insert statement
-            self.cur.execute("""
-                INSERT INTO app_coins (name, item, depositAPY, borrowAPY) VALUES (?, ?, ?, ?)
-            """,
+            self.cur.execute("INSERT INTO coins (name, item, deposit, borrow) VALUES ( %s, %s, %s, %s)",
                              (
                                  item['name'],
                                  item['item'],
-                                 item['depositAPY'],
-                                 item['borrowAPY']
+                                 item['deposit'],
+                                 item['borrow']
                              ))
 
             # Execute insert of data into database
-            self.con.commit()
+            self.connection.commit()
 
         return item

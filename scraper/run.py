@@ -4,9 +4,11 @@
 # import schedule
 import time
 import subprocess
+import time
+time.sleep(10)
 
-drift = ["scrapy", "crawl", "drift"]
-kamino = ["scrapy", "crawl", "kamino"]
+drift = ["scrapy", "crawl", "drift", '--nolog']
+kamino = ["scrapy", "crawl", "kamino", '--nolog']
 
 # schedule.every(1).minute.do(subprocess.Popen(cmd).wait())
 # while True:

@@ -9,7 +9,7 @@ class MyAPI {
   Future request() async {
     //todo add problem response failure situation
     const subUrl = 'coins/';
-    final Uri uri = Uri.parse('http://127.0.0.1:8000/' + subUrl);
+    final Uri uri = Uri.parse('http://backend:8000' + subUrl);
     try {
       final http.Response response = await client.post(uri, headers: headers);
       return jsonDecode(response.body);
