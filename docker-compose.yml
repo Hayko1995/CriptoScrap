@@ -8,28 +8,28 @@ services:
     ports:
       - '0.0.0.0:5432:5432'
 
-  # backend:
-  #   build:
-  #     context: ./criptoBack
-  #     dockerfile: ./dockerfile
-  #   container_name: backend
-  #   command: sh -c "./start.sh"
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - "8000:8000"
-  #   depends_on:
-  #     - db
+  backend:
+    build:
+      context: ./criptoBack
+      dockerfile: ./dockerfile
+    container_name: backend
+    command: sh -c "./start.sh"
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
 
-  # front:
-  #   build:
-  #     context: ./criptofront
-  #     dockerfile: ./dockerfile
-  #   container_name: front
-  #   ports:
-  #     - "80:80"
-  #   depends_on:
-  #     - backend
+  front:
+    build:
+      context: ./criptofront
+      dockerfile: ./dockerfile
+    container_name: front
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
 
   scraper:
     build:
