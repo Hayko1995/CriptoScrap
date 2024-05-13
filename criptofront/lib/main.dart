@@ -61,6 +61,13 @@ class _MyHomePageState extends State<MyHomePage> {
         if (item['name'] == selectedCoin) {
           if (item['staking'] != '') {
             var _item = {};
+            if (item['item'] == 'marinade') {
+              _item['url'] = 'https://marinade.finance/app/';
+            }
+            if (item['item'] == 'solblaze') {
+              _item['url'] = 'https://stake.solblaze.org/app/';
+            }
+
             _item['site'] = item['item'];
             _item['price'] = item['staking'];
             _results.add(_item);
