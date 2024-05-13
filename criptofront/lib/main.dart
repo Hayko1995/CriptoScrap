@@ -55,31 +55,47 @@ class _MyHomePageState extends State<MyHomePage> {
   getPrices(selectedCoin, selectedType) {
     String filter = '';
     results = [];
-    if (selectedType == 'BORROW') {
-      filter = "borrow";
-    }
-    if (selectedType == 'LEND') {
-      filter = "deposit";
-    }
-    _results = [];
-    for (var item in coins) {
-      if (item['name'] == selectedCoin) {
-        var _item = {};
-        _item['site'] = item['item'];
-        _item['price'] = item[filter];
-        if (item['name'] == 'marginfi') {
-          _item['url'] = 'https://app.marginfi.com';
+    if (selectedType == 'STAKING') {
+      _results = [];
+      for (var item in coins) {
+        if (item['name'] == selectedCoin) {
+          if (item['staking'] != '') {
+            var _item = {};
+            _item['site'] = item['item'];
+            _item['price'] = item['staking'];
+            _results.add(_item);
+          }
         }
-        print(item);
-        if (item['name'] == 'SOL' && item['item'] == 'drift') {
-          _item['url'] = 'https://app.drift.trade/earn/lend-borrow/deposits';
+      }
+    } else {
+      if (selectedType == 'BORROW') {
+        filter = "borrow";
+      }
+      if (selectedType == 'LEND') {
+        filter = "deposit";
+      }
+      _results = [];
+      for (var item in coins) {
+        if (item['item'] == 'solblaze' || item['item'] == 'marinade') {
+          continue;
         }
-        if (item['name'] == 'SOL' && item['item'] == 'kamino') {
-          _item['url'] =
-              'https://app.kamino.finance/lending/reserve/7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF/d4A2prbA2whesmvHaL88BH6Ewn5N4bTSU2Ze8P6Bc4Q';
+        if (item['name'] == selectedCoin) {
+          var _item = {};
+          _item['site'] = item['item'];
+          _item['price'] = item[filter];
+          if (item['name'] == 'marginfi') {
+            _item['url'] = 'https://app.marginfi.com';
+          }
+          if (item['name'] == 'SOL' && item['item'] == 'drift') {
+            _item['url'] = 'https://app.drift.trade/earn/lend-borrow/deposits';
+          }
+          if (item['name'] == 'SOL' && item['item'] == 'kamino') {
+            _item['url'] =
+                'https://app.kamino.finance/lending/reserve/7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF/d4A2prbA2whesmvHaL88BH6Ewn5N4bTSU2Ze8P6Bc4Q';
+          }
+
+          _results.add(_item);
         }
-        print(_item);
-        _results.add(_item);
       }
     }
     setState(() {
@@ -191,7 +207,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                item['site'],
+                                item['site'].toString(),
                               ),
                             ),
                             Padding(

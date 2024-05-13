@@ -74,7 +74,6 @@ class ScrapingMagnifiSpider(scrapy.Spider):
                 item['borrow'] = coin_table[2].xpath(
                     './/div[contains(@class, "flex")]/div/text()').get()
 
-                
                 yield item
 
 
@@ -159,3 +158,61 @@ class ScrapingDriftSpider(scrapy.Spider):
                     item['borrow'] = coin_table[3].xpath(
                         './/span[contains(@class, "whitespace-nowrap")]/text()').get()
                     yield item
+
+
+class ScrapingMarinadeSpider(scrapy.Spider):
+    name = "marinade"
+    urls = ['https://marinade.finance/app/']
+
+    def start_requests(self):
+
+        for url in self.urls:
+            yield scrapy.Request(url, meta=dict(
+                playwright=True,
+                playwright_include_page=True,
+                playwright_page_methods=[
+                    PageMethod("wait_for_timeout", 10000)
+                ]
+            ))
+
+    def parse(self, response):
+
+        coin_div = response.xpath(
+            '//span[contains(@class, "text-2xl md:text-[40px] font-semibold text-primary")]')
+
+        item = {}
+        item['item'] = 'marinade'
+        item['name'] = "SOL"
+        staking = coin_div[1].xpath('./text()').get().strip()
+        item['staking'] = staking
+        yield item
+
+
+class ScrapingSolblazeSpider(scrapy.Spider):
+    name = "solblaze"
+    urls = ['https://stake.solblaze.org/app/']
+
+    def start_requests(self):
+
+        for url in self.urls:
+            yield scrapy.Request(url, meta=dict(
+                playwright=True,
+                playwright_include_page=True,
+                playwright_page_methods=[
+                    PageMethod("wait_for_timeout", 10000)
+                ]
+            ))
+
+    def parse(self, response):
+        coin_div = response.xpath(
+            '//div[contains(@class, "stat-body")]')
+        with open("a.html", 'w') as html_file:
+            html_file.write(str(coin_div.extract()))
+        item = {}
+        item['item'] = 'solblaze'
+        item['name'] = "SOL"
+        staking = coin_div[-1].xpath('./text()').get().strip()
+        item['staking'] = staking
+        print("🐍 File: spiders/cripto.py | Line: 217 | parse ~ item",item)
+        yield item
+        

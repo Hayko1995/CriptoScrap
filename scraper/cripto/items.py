@@ -13,3 +13,4 @@ class CriptoItem(scrapy.Item):
     item = Field()
     deposit = Field()
     borrow = Field()
+    staking = Field()

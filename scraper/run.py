@@ -5,22 +5,20 @@
 import time
 import subprocess
 import time
-time.sleep(10)
+time.sleep(20)
 
 drift = ["scrapy", "crawl", "drift", '--nolog']
 kamino = ["scrapy", "crawl", "kamino", '--nolog']
 magnifiLand = ["scrapy", "crawl", "marginfi-land", '--nolog']
 magnifiBorrow = ["scrapy", "crawl", "marginfi-borrow", '--nolog']
+solblaze = ["scrapy", "crawl", "solblaze"]
+marinade = ["scrapy", "crawl", "marinade"]
 
-# schedule.every(1).minute.do(subprocess.Popen(cmd).wait())
-# while True:
-#     schedule.run_pending()
-
-
-starttime = time.monotonic()
 while True:
     subprocess.run(drift)
     subprocess.run(kamino)
     subprocess.run(magnifiLand)
     subprocess.run(magnifiBorrow)
-    time.sleep(60.0 - ((time.monotonic() - starttime) % 60.0))
+    subprocess.run(solblaze)
+    subprocess.run(marinade)
+    time.sleep(60.0)

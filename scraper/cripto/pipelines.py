@@ -39,7 +39,8 @@ class SqlitePipeline:
             name text,
             item text,
             deposit text,
-            borrow text
+            borrow text,
+            staking text
         )
         """)
 
@@ -48,7 +49,9 @@ class SqlitePipeline:
             item['deposit'] = ''
         if (not 'borrow' in item):
             item['borrow'] = ''
-
+        if (not 'staking' in item):
+            item['staking'] = ''
+        
         # Check to see if text is already in database
         self.cur.execute(
             "select * from coins where name = %s and item = %s", (item['name'], item['item']))
@@ -73,12 +76,13 @@ class SqlitePipeline:
         # If text isn't in the DB, insert data
         else:
             # Define insert statement
-            self.cur.execute("INSERT INTO coins (name, item, deposit, borrow) VALUES ( %s, %s, %s, %s)",
+            self.cur.execute("INSERT INTO coins (name, item, deposit, borrow, staking) VALUES ( %s, %s, %s, %s, %s)",
                              (
                                  item['name'],
                                  item['item'],
                                  item['deposit'],
-                                 item['borrow']
+                                 item['borrow'],
+                                 item['staking']
                              ))
 
             # Execute insert of data into database
