@@ -9,16 +9,16 @@ time.sleep(20)
 
 drift = ["scrapy", "crawl", "drift", '--nolog']
 kamino = ["scrapy", "crawl", "kamino", '--nolog']
-magnifiLand = ["scrapy", "crawl", "marginfi-land", '--nolog']
-magnifiBorrow = ["scrapy", "crawl", "marginfi-borrow", '--nolog']
+magnifiLand = ["scrapy", "crawl", "marginfi-land"]
+magnifiBorrow = ["scrapy", "crawl", "marginfi-borrow"]
 solblaze = ["scrapy", "crawl", "solblaze"]
 marinade = ["scrapy", "crawl", "marinade"]
 
 while True:
-    subprocess.run(drift)
-    subprocess.run(kamino)
+    # subprocess.run(drift)
+    # subprocess.run(kamino)
     subprocess.run(magnifiLand)
     subprocess.run(magnifiBorrow)
-    subprocess.run(solblaze)
-    subprocess.run(marinade)
+    # subprocess.run(solblaze)
+    # subprocess.run(marinade)
     time.sleep(60.0)

@@ -62,19 +62,24 @@ class ScrapingMagnifiSpider(scrapy.Spider):
     def parse(self, response):
         coin_div = response.xpath(
             '//tr[contains(@class, "transition-colors")]')
-        item = {}
+
         coin_div = coin_div[1:]
         for coin in coin_div:
             coin_table = coin.xpath('.//td[contains(@class, "align-middle")]')
-            name = coin_table[0].xpath(
-                './/div[contains(@class, "flex")]/div/text()').get()
-            item['item'] = 'marginfi'
-            if (name in supportedCoins):
-                item['name'] = name
-                item['borrow'] = coin_table[2].xpath(
+            try:
+                name = coin_table[0].xpath(
                     './/div[contains(@class, "flex")]/div/text()').get()
 
-                yield item
+                if (name in supportedCoins):
+                    item = {}
+                    item['item'] = 'marginfi'
+                    item['name'] = name
+                    item['borrow'] = coin_table[2].xpath(
+                        './/div[contains(@class, "flex")]/div/text()').get()
+
+                    yield item
+            except:
+                continue
 
 
 class ScrapingMagnifiLandSpider(scrapy.Spider):
@@ -95,18 +100,27 @@ class ScrapingMagnifiLandSpider(scrapy.Spider):
     def parse(self, response):
         coin_div = response.xpath(
             '//tr[contains(@class, "transition-colors")]')
-        item = {}
+
         coin_div = coin_div[1:]
         for coin in coin_div:
+
             coin_table = coin.xpath('.//td[contains(@class, "align-middle")]')
-            name = coin_table[0].xpath(
-                './/div[contains(@class, "flex")]/div/text()').get()
-            item['item'] = 'marginfi'
-            if (name in supportedCoins):
-                item['name'] = name
-                item['deposit'] = coin_table[2].xpath(
+            try:
+                name = coin_table[0].xpath(
                     './/div[contains(@class, "flex")]/div/text()').get()
-                yield item
+                if (name in supportedCoins):
+                    item = {}
+                    item['item'] = 'marginfi'
+                    with open("a.html", 'w') as html_file:
+                        html_file.write(str(coin_table.extract()))
+                    item['name'] = name
+                    item['deposit'] = coin_table[2].xpath(
+                        './/div[contains(@class, "flex")]/div/text()').get()
+                    print("🐍 File: spiders/cripto.py | Line: 126 | parse ~ item", item)
+
+                    yield item
+            except:
+                continue
 
 
 class ScrapingDriftSpider(scrapy.Spider):
@@ -213,6 +227,5 @@ class ScrapingSolblazeSpider(scrapy.Spider):
         item['name'] = "SOL"
         staking = coin_div[-1].xpath('./text()').get().strip()
         item['staking'] = staking
-        print("🐍 File: spiders/cripto.py | Line: 217 | parse ~ item",item)
+        print("🐍 File: spiders/cripto.py | Line: 217 | parse ~ item", item)
         yield item
-        
