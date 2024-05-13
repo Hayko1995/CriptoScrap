@@ -31,7 +31,7 @@ class ScrapingKaminoSpider(scrapy.Spider):
             coins = coin.xpath('.//td')
             name = coins[0].xpath(
                 './/div[contains(@class, "_reserveName_1nycx_12")]/p/text()').get()
-            
+
             if (name in supportedCoins):
                 item['name'] = name
                 item['item'] = "kamino"
@@ -43,7 +43,7 @@ class ScrapingKaminoSpider(scrapy.Spider):
 
 
 class ScrapingMagnifiSpider(scrapy.Spider):
-    name = "marginfi"
+    name = "marginfi-borrow"
     allowed_domains = ["app.marginfi.com"]
 
     def start_requests(self):
@@ -51,6 +51,43 @@ class ScrapingMagnifiSpider(scrapy.Spider):
         yield scrapy.Request(url, meta=dict(
             playwright=True,
             playwright_include_page=True,
+            # f"The element '{record_variable}' is found in the received data"
+            playwright_page_methods=[
+                PageMethod("click", "button[type=button]"),
+                PageMethod("click", "button[aria-label=Borrow]"),
+                PageMethod("wait_for_timeout", 10000)
+            ]
+        ))
+
+    def parse(self, response):
+        coin_div = response.xpath(
+            '//tr[contains(@class, "transition-colors")]')
+        item = {}
+        coin_div = coin_div[1:]
+        for coin in coin_div:
+            coin_table = coin.xpath('.//td[contains(@class, "align-middle")]')
+            name = coin_table[0].xpath(
+                './/div[contains(@class, "flex")]/div/text()').get()
+            item['item'] = 'marginfi'
+            if (name in supportedCoins):
+                item['name'] = name
+                item['borrow'] = coin_table[2].xpath(
+                    './/div[contains(@class, "flex")]/div/text()').get()
+
+                
+                yield item
+
+
+class ScrapingMagnifiLandSpider(scrapy.Spider):
+    name = "marginfi-land"
+    allowed_domains = ["app.marginfi.com"]
+
+    def start_requests(self):
+        url = "https://app.marginfi.com/"
+        yield scrapy.Request(url, meta=dict(
+            playwright=True,
+            playwright_include_page=True,
+            # f"The element '{record_variable}' is found in the received data"
             playwright_page_methods=[
                 PageMethod("wait_for_timeout", 10000)
             ]
@@ -63,26 +100,14 @@ class ScrapingMagnifiSpider(scrapy.Spider):
         coin_div = coin_div[1:]
         for coin in coin_div:
             coin_table = coin.xpath('.//td[contains(@class, "align-middle")]')
-
-            with open("a.html", 'w') as html_file:
-                html_file.write(
-                    str(coin_table.extract()))
-            item['coinName'] = coin_table[0].xpath(
+            name = coin_table[0].xpath(
                 './/div[contains(@class, "flex")]/div/text()').get()
-            item['price'] = coin_table[1].xpath(
-                './/div[contains(@class, "flex")]/div/text()').get()
-            item['apy'] = coin_table[2].xpath(
-                './/div[contains(@class, "flex")]/div/text()').get()
-            item['weight'] = coin_table[3].xpath(
-                './/div/text()').get()
-            item['deposits'] = coin_table[4].xpath(
-                './/span/text()').get()
-            item['globalLimit'] = coin_table[5].xpath(
-                './/div/text()').get()
-            item['utilisation'] = coin_table[6].xpath(
-                './/div/text()').get()
-
-            yield item
+            item['item'] = 'marginfi'
+            if (name in supportedCoins):
+                item['name'] = name
+                item['deposit'] = coin_table[2].xpath(
+                    './/div[contains(@class, "flex")]/div/text()').get()
+                yield item
 
 
 class ScrapingDriftSpider(scrapy.Spider):
@@ -134,5 +159,3 @@ class ScrapingDriftSpider(scrapy.Spider):
                     item['borrow'] = coin_table[3].xpath(
                         './/span[contains(@class, "whitespace-nowrap")]/text()').get()
                     yield item
-                    
-                    

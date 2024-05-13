@@ -9,6 +9,8 @@ time.sleep(10)
 
 drift = ["scrapy", "crawl", "drift", '--nolog']
 kamino = ["scrapy", "crawl", "kamino", '--nolog']
+magnifiLand = ["scrapy", "crawl", "marginfi-land", '--nolog']
+magnifiBorrow = ["scrapy", "crawl", "marginfi-borrow", '--nolog']
 
 # schedule.every(1).minute.do(subprocess.Popen(cmd).wait())
 # while True:
@@ -19,4 +21,6 @@ starttime = time.monotonic()
 while True:
     subprocess.run(drift)
     subprocess.run(kamino)
+    subprocess.run(magnifiLand)
+    subprocess.run(magnifiBorrow)
     time.sleep(60.0 - ((time.monotonic() - starttime) % 60.0))
