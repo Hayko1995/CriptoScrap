@@ -87,7 +87,7 @@ class ScrapingMagnifiSpider(scrapy.Spider):
 
 class ScrapingDriftSpider(scrapy.Spider):
     name = "drift"
-    allowed_domains = ["app.marginfi.com"]
+    allowed_domains = ["app.drift.trade"]
     urls = ['https://app.drift.trade/earn/lend-borrow/deposits',
             'https://app.drift.trade/earn/lend-borrow/borrow']
 

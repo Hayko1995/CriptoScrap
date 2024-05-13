@@ -5,6 +5,7 @@ RUN apt-get install libgdal-dev -y
 RUN apt install gdal-bin python3-gdal -y
 RUN pip install --upgrade pip
 RUN pip install numpy
+RUN apt install netcat-traditional -y
 # RUN pip install gdal
 
 ENV PYTHONUNBUFFERED 1
@@ -13,3 +14,4 @@ WORKDIR /app
 ADD requirements.txt /app/
 RUN pip install -r requirements.txt
 ADD . /app/
+RUN chmod +x ./start.sh

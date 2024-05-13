@@ -47,31 +47,6 @@ COPY . /app/
 WORKDIR /app/
 RUN flutter build web --web-renderer html --release
 
-# RUN flutter run -d web-server --web-hostname 0.0.0.0 --web-port 8080
-
-
-
-
-
-# # FROM  cirrusci/flutter:release as build
-
-# RUN apt update
-# RUN apt install -y tmux inotify-tools net-tools
-
-# # RUN mkdir /app/
-# # WORKDIR /app/
-
-# # COPY . /app/
-# COPY ./entrypoint.sh ./entrypoint.sh
-
-# EXPOSE 8080
-# RUN flutter upgrade
-# RUN flutter pub get
-# RUN chmod +x entrypoint.sh
-
-# ENTRYPOINT ["/bin/bash", "./entrypoint.sh"]
-
-
 #use nginx to deploy
 FROM nginx:1.25.2-alpine
 
