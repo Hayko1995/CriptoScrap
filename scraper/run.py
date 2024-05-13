@@ -15,10 +15,10 @@ solblaze = ["scrapy", "crawl", "solblaze"]
 marinade = ["scrapy", "crawl", "marinade"]
 
 while True:
-    # subprocess.run(drift)
-    # subprocess.run(kamino)
+    subprocess.run(drift)
+    subprocess.run(kamino)
     subprocess.run(magnifiLand)
     subprocess.run(magnifiBorrow)
-    # subprocess.run(solblaze)
-    # subprocess.run(marinade)
+    subprocess.run(solblaze)
+    subprocess.run(marinade)
     time.sleep(60.0)

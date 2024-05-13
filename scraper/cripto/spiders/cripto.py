@@ -111,8 +111,6 @@ class ScrapingMagnifiLandSpider(scrapy.Spider):
                 if (name in supportedCoins):
                     item = {}
                     item['item'] = 'marginfi'
-                    with open("a.html", 'w') as html_file:
-                        html_file.write(str(coin_table.extract()))
                     item['name'] = name
                     item['deposit'] = coin_table[2].xpath(
                         './/div[contains(@class, "flex")]/div/text()').get()
@@ -220,8 +218,6 @@ class ScrapingSolblazeSpider(scrapy.Spider):
     def parse(self, response):
         coin_div = response.xpath(
             '//div[contains(@class, "stat-body")]')
-        with open("a.html", 'w') as html_file:
-            html_file.write(str(coin_div.extract()))
         item = {}
         item['item'] = 'solblaze'
         item['name'] = "SOL"
